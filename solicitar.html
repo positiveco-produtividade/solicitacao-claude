@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solicitação do Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4efe6; --paper-2:#ebe4d6; --card:#fbf8f2; --ink:#1f1b16; --ink-2:#5b5348; --line:#d8cfbf;
+  --accent:#c4552d; --ok:#3d6b4f; --req:#e02424;
+  --display:"Fraunces",Georgia,serif; --body:"Instrument Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#16130f; --paper-2:#1f1b16; --card:#211d18; --ink:#f1ebe0; --ink-2:#aa9f8f; --line:#3a332a;
+    --accent:#e2754b; --ok:#79b08d; --req:#ff6b6b;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#16130f; --paper-2:#1f1b16; --card:#211d18; --ink:#f1ebe0; --ink-2:#aa9f8f; --line:#3a332a;
+  --accent:#e2754b; --ok:#79b08d; --req:#ff6b6b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 var(--body)}
+.wrap{max-width:760px;margin:0 auto;padding:40px 24px 80px}
+header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:24px}
+.eyebrow{font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+h1{font:800 clamp(36px,6vw,60px)/.95 var(--display);letter-spacing:-.03em;margin:8px 0 14px}
+h2{font:600 24px/1.1 var(--display);margin:0}
+.intro{margin:0;color:var(--ink-2);font-size:14px}
+a{color:var(--accent)}
+.obrig{margin:10px 0 0;font-size:12px;color:var(--req)}
+.panel{background:var(--card);border:1.5px solid var(--line);border-radius:4px;padding:6px 26px 26px}
+.q{border:0;border-bottom:1px solid var(--line);margin:0;padding:18px 0;display:flex;flex-direction:column;gap:9px;min-width:0}
+.q[hidden],[hidden]{display:none!important}
+.q legend,.qt{font:600 15px/1.35 var(--body);color:var(--ink);padding:0}
+.q legend{float:left;width:100%;margin-bottom:4px}
+.ast{color:var(--req)}
+.opt{display:flex;align-items:center;gap:10px;font-size:14px;line-height:1.35;cursor:pointer}
+.opt input[type=radio],.opt input[type=checkbox]{flex:none;margin:0;width:17px;height:17px;accent-color:var(--accent)}
+input[type=text],input[type=email],textarea{font:14px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:9px 11px;width:100%}
+textarea{resize:vertical;min-height:84px}
+input:focus,textarea:focus{outline:none;border-color:var(--accent)}
+.opt .outro{flex:1;max-width:340px;padding:5px 9px}
+.q.falta{border-left:3px solid var(--req);padding-left:14px;margin-left:-17px;background:color-mix(in srgb,var(--req) 6%,transparent)}
+.erro{margin:0;font:500 13px var(--body);color:var(--req)}
+.marcar{align-self:flex-start;padding:3px 10px;font-size:12px}
+#faltas{margin-top:20px;padding:14px 16px;border:1.5px solid var(--req);border-radius:8px;background:color-mix(in srgb,var(--req) 6%,transparent);font-size:14px}
+#faltas b{color:var(--req)}
+#faltas ul{margin:8px 0 0;padding-left:20px}
+#faltas li{margin:3px 0}
+#faltas a{cursor:pointer}
+.act{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:22px;flex-wrap:wrap}
+.act .msg{margin-right:auto;font:13px var(--mono);color:var(--req)}
+button{font:500 14px var(--body);border:1.5px solid var(--ink);background:transparent;color:var(--ink);padding:9px 18px;border-radius:999px;cursor:pointer;transition:.15s}
+button:hover{background:var(--ink);color:var(--paper)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.primary:hover{filter:brightness(1.08)}
+button:disabled{opacity:.6;cursor:wait}
+.ok{padding:28px 0 6px;display:grid;gap:12px}
+.ok h2{color:var(--ok)}
+footer{margin-top:22px;font:12px var(--mono);color:var(--ink-2)}
+@media (max-width:760px){
+  .wrap{padding:24px 16px 60px}.panel{padding:4px 16px 20px}
+  .q.falta{padding-left:10px;margin-left:-13px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Positive Company · Acesso ao Claude</div>
+    <h1>Solicitação do Claude</h1>
+    <p class="intro">Depois que você preencher esta solicitação de pedido, entraremos em contato para verificar os detalhes e a disponibilidade antes de o pedido ser concluído. Se você quiser um serviço mais rápido e informações diretas envie um e-mail para <a href="mailto:caiofranco@positiveco.com.br">caiofranco@positiveco.com.br</a></p>
+    <p class="obrig">* Indica uma pergunta obrigatória</p>
+  </header>
+
+  <section class="panel">
+    <form id="f" novalidate onsubmit="event.preventDefault()" onchange="condicoes(); revisa()" oninput="revisa()">
+      <div id="perguntas"></div>
+      <div id="faltas" role="alert" hidden></div>
+      <div class="act"><span class="msg" id="msg"></span><button type="button" onclick="limpa()">Limpar</button><button type="button" class="primary" id="btEnviar" onclick="envia()">Enviar</button></div>
+    </form>
+    <div class="ok" id="ok" hidden>
+      <h2>Solicitação enviada</h2>
+      <p class="intro">Sua resposta foi registrada. Entraremos em contato para verificar os detalhes e a disponibilidade.</p>
+      <div class="act"><button type="button" onclick="limpa()">Enviar outra resposta</button></div>
+    </div>
+  </section>
+  <footer>Nunca envie senhas por este formulário.</footer>
+</div>
+
+<script>
+// destino: o app da Web da planilha "Solicitações do Claude" (apps-script/Codigo.gs).
+// Cole aqui a URL que termina em /exec. A ordem das perguntas abaixo é a ordem das colunas da planilha.
+const API = 'https://script.google.com/macros/s/AKfycbyUN6WVnSpiWDWeSmywmx53n4K_ce-nOf4bY3BicbyPA9ms0o8yhN0cWJktzNWfFxIt/exec';
+const OUTRO = '__outro';
+const PERGUNTAS = [
+  {t:'Nome Completo', tipo:'text', ob:1},
+  {t:'E-mail Corporativo', tipo:'email', ob:1},
+  {t:'Matricula / Usuário TOTVS', tipo:'text'},
+  {t:'Cargo / Função', tipo:'text', ob:1},
+  {t:'Departamento / Área', tipo:'radio', ob:1, op:['Administrativo','Recursos Humanos','Diretoria','Produtividade','Criação e Conteúdo','Digital','Vendas E-commerce','Qualidade','PD&I','Projetos/Processos','Trade Marketing','Comunidades e Relacionamento','Eventos']},
+  {t:'Gestor / Aprovador Direto', tipo:'text', ob:1},
+  {t:'Qual será a finalidade principal do uso do Claude?', tipo:'check', ob:1, outro:1, op:['Redação, revisão e formatação de documentos/e-mails','Pesquisa, síntese de textos e brainstorming de ideias','Análise de dados, relatórios e planilhas','Programação, geração ou revisão de código (Software/Scripts)','Suporte ao cliente ou automação de fluxos']},
+  {t:'Qual será a finalidade principal do uso do Claude?', tipo:'area', ob:1},
+  {t:'Detalhamento da Demanda', tipo:'area', ob:1},
+  {t:'Qual o impacto direto esperado com a liberação desta ferramenta?', tipo:'radio', ob:1, outro:1, op:['Redução do tempo de execução de tarefas rotineiras (Ganho de produtividade)','Melhoria na qualidade de entregas/código/documentos','Automação de processos que antes eram manuais','Resolução de gargalos específicos de projetos']},
+  {t:'Haverá necessidade de integração via API em sistemas, scripts ou plataformas da empresa?', tipo:'radio', ob:1, op:['Sim','Não']},
+  {t:'Frequência de Uso', tipo:'check', ob:1, op:['Diário','Semanal','Eventual']},
+  {t:'Frequência e Horas Diárias', tipo:'radio', ob:1, outro:1, op:['Uso Contínuo / Intensivo: Mais de 3 horas por dia (Diário)','Uso Moderado: De 1 a 3 horas por dia (Diário)','Uso Pontual: Algumas horas por semana (1 a 5 horas/semana)','Uso Eventual / Ocasional: Apenas em demandas específicas ou testes (Menos de 2 horas/mês)']},
+  {t:'Período / Duração do Acesso Necessário', tipo:'radio', ob:1, outro:1, op:['1 Mês','3 Meses','6 Meses','Acesso Permanente','Acesso Temporário']},
+  {t:'Interface Requerida', tipo:'radio', ob:1, op:['Claude Web','App','Claude API / Integração']},
+  {t:'O acesso será individual ou compartilhado com a equipe?', tipo:'radio', ob:1, op:['Uso Pessoal','Compartilhado']},
+  // só aparece para "Compartilhado"; oculta, vai para a planilha como "Não se aplica"
+  {t:'Se compartilhado com quem seria?', tipo:'text', ob:1, se:[15,'Compartilhado'], vazio:'Não se aplica'},
+  {t:'Qual a necessidade técnica para utilizar o Claude em comparação ao Germine?', tipo:'area', ob:1},
+  {t:'Você já utiliza (ou testou) o Germine para esta mesma finalidade?', tipo:'radio', ob:1, outro:1, op:['Sim','Não']},
+  {t:'Por que as soluções de IA gratuitas ou atualmente já contratadas pela empresa não suprem a sua necessidade?', tipo:'area', ob:1},
+  {t:'O uso do Claude substituirá alguma ferramenta de software paga atualmente utilizada pela equipe?', tipo:'radio', ob:1, outro:1, op:['Sim','Não']},
+  {t:'Termo de Compromisso e Governança', tipo:'check', ob:1, todas:1, op:['Não inclusão de credenciais','Sanitização de Dados Pessoais:','Revisão Humana:','Li, entendi e concordo com a política de governança de IA e classificação de dados.']},
+];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const escolha = p => p.tipo === 'radio' || p.tipo === 'check';
+const bloco = i => f.querySelector(`[data-i="${i}"]`);
+
+function htmlPergunta(p, i){
+  const n = 'q' + i, tit = `${esc(p.t)}${p.ob ? ' <span class="ast">*</span>' : ''}`;
+  if (escolha(p)){
+    const tp = p.tipo === 'radio' ? 'radio' : 'checkbox', rq = p.ob && tp === 'radio' ? ' required' : '';
+    return `<fieldset class="q" data-i="${i}"><legend>${tit}</legend>` +
+      (p.todas ? `<button type="button" class="marcar" onclick="marcaTodos(${i})">marcar todos</button>` : '') +
+      p.op.map(o => `<label class="opt"><input type="${tp}" name="${n}" value="${esc(o)}"${rq}>${esc(o)}</label>`).join('') +
+      (p.outro ? `<label class="opt"><input type="${tp}" name="${n}" value="${OUTRO}"${rq}>Outro:<input type="text" class="outro" name="${n}_outro" oninput="if (this.value) this.parentNode.firstChild.checked = true"></label>` : '') + '</fieldset>';
+  }
+  const campo = p.tipo === 'area' ? `<textarea name="${n}"${p.ob ? ' required' : ''}></textarea>` : `<input type="${p.tipo}" name="${n}"${p.ob ? ' required' : ''}>`;
+  return `<label class="q" data-i="${i}"><span class="qt">${tit}</span>${campo}</label>`;
+}
+// respostas de uma pergunta: lista de [valor, textoDoOutro]
+function respostas(p, i){
+  const n = 'q' + i;
+  if (!escolha(p)) return [[f.elements[n].value.trim()]].filter(([v]) => v);
+  return [...f.querySelectorAll(`[name="${n}"]:checked`)].map(c => [c.value, c.value === OUTRO ? f.elements[n + '_outro'].value.trim() : '']);
+}
+function condicoes(){
+  PERGUNTAS.forEach((p, i) => { if (!p.se) return;
+    const vis = respostas(PERGUNTAS[p.se[0]], p.se[0]).some(([v]) => v === p.se[1]);
+    bloco(i).hidden = !vis; bloco(i).querySelectorAll('input,textarea').forEach(x => x.disabled = !vis);
+  });
+}
+// o que falta em cada pergunta visível: [{i, motivo}]
+function motivo(p, i){
+  if (bloco(i).hidden) return '';
+  const rs = respostas(p, i);
+  if (rs.some(([v, outro]) => v === OUTRO && !outro)) return 'Escreva qual é a outra opção.';
+  if (!p.ob) return '';
+  if (p.tipo === 'radio') return rs.length ? '' : 'Escolha uma opção.';
+  if (p.tipo === 'check'){
+    if (p.todas){ const n = p.op.length - rs.length; return n > 0 ? `Marque todos os itens (${n === 1 ? 'falta 1' : `faltam ${n}`}).` : '' }
+    return rs.length ? '' : 'Marque pelo menos uma opção.';
+  }
+  if (!rs.length) return 'Resposta obrigatória.';
+  if (p.tipo === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rs[0][0])) return 'Digite um e-mail válido.';
+  return '';
+}
+const faltando = () => PERGUNTAS.map((p, i) => ({i, motivo: motivo(p, i)})).filter(x => x.motivo);
+function marca(i, m){
+  const b = bloco(i); b.classList.toggle('falta', !!m);
+  let e = b.querySelector(':scope > .erro');
+  if (m && !e){ e = document.createElement('p'); e.className = 'erro'; b.append(e) }
+  if (e){ if (m) e.textContent = m; else e.remove() }
+}
+let mostrandoFaltas = false;
+function mostraFaltas(){
+  const fs = faltando();
+  PERGUNTAS.forEach((p, i) => marca(i, fs.find(x => x.i === i)?.motivo));
+  faltas.hidden = !fs.length;
+  faltas.innerHTML = fs.length ? `<b>${fs.length === 1 ? 'Falta 1 resposta' : `Faltam ${fs.length} respostas`}</b> antes de enviar:<ul>` +
+    fs.map(x => `<li><a onclick="vaiPara(${x.i})">${esc(PERGUNTAS[x.i].t)}</a> — ${esc(x.motivo)}</li>`).join('') + '</ul>' : '';
+  return fs;
+}
+// depois da primeira tentativa, a lista se atualiza conforme a pessoa responde
+function revisa(){ if (mostrandoFaltas && !mostraFaltas().length) mostrandoFaltas = false }
+function vaiPara(i){ const b = bloco(i); b.scrollIntoView({behavior:'smooth', block:'center'}); b.querySelector('input:not([disabled]),textarea')?.focus({preventScroll:true}) }
+function marcaTodos(i){ f.querySelectorAll(`[name="q${i}"]`).forEach(c => c.checked = true); revisa() }
+// uma resposta por coluna: caixas separadas por vírgula, "Outro" com o texto digitado
+const resposta = (p, i) => bloco(i).hidden ? p.vazio || '' : respostas(p, i).map(([v, outro]) => v === OUTRO ? outro : v).filter(Boolean).join(', ');
+function envia(){
+  msg.textContent = '';
+  mostrandoFaltas = true;
+  const fs = mostraFaltas();
+  if (fs.length){ vaiPara(fs[0].i); return }
+  mostrandoFaltas = false;
+  if (!API){ msg.textContent = 'Formulário ainda não configurado para envio.'; return }
+  btEnviar.disabled = true; btEnviar.textContent = 'Enviando…';
+  // corpo em texto puro para o navegador não exigir permissão extra (CORS) do Google
+  fetch(API, {method:'POST', body: JSON.stringify({acao:'enviar', respostas: PERGUNTAS.map(resposta)})})
+    .then(r => r.json()).then(j => { if (!j.ok) throw 0; f.hidden = true; ok.hidden = false; scrollTo({top:0, behavior:'smooth'}) })
+    .catch(() => { msg.textContent = 'Não consegui enviar. Verifique a conexão e tente de novo.' })
+    .finally(() => { btEnviar.disabled = false; btEnviar.textContent = 'Enviar' });
+}
+function limpa(){ f.reset(); f.hidden = false; ok.hidden = true; msg.textContent = ''; mostrandoFaltas = false; faltas.hidden = true; condicoes(); PERGUNTAS.forEach((p, i) => marca(i, '')) }
+
+perguntas.innerHTML = PERGUNTAS.map(htmlPergunta).join('');
+condicoes();
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+# só o formulário vai para o GitHub Pages; a página de Membros (index.html) tem a lista de e-mails e fica local
+*
+!.gitignore
+!solicitar.html
